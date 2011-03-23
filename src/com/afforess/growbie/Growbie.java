@@ -13,7 +13,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class Growbie extends JavaPlugin {
 
-	private final GrowbieBlockListener blockListener = new GrowbieBlockListener();
+	private final GrowbiePlayerListener playerListener = new GrowbiePlayerListener();
 	public static Growbie instance;
 	public static File growbie;
 
@@ -25,7 +25,7 @@ public class Growbie extends JavaPlugin {
 	public void onEnable() {
 		instance = this;
 		growbie = this.getFile();
-		getServer().getPluginManager().registerEvent(Event.Type.BLOCK_RIGHTCLICKED, this.blockListener, Event.Priority.Normal, this);
+		getServer().getPluginManager().registerEvent(Event.Type.PLAYER_INTERACT, this.playerListener, Event.Priority.Normal, this);
 		System.out.println( getDescription().getName() + " version " + getDescription().getVersion() + " enabled.");
 		GrowbieConfiguration.checkConfigFile();
 	}
