@@ -1,9 +1,9 @@
 package com.afforess.growbie;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import org.bukkit.Material;
-import org.bukkit.TreeType;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
@@ -21,6 +21,12 @@ public abstract class Gardener {
 	public static boolean growPlants(Block block) {
 		boolean didGrow = false;
 		if (GrowbieConfiguration.isGrowablePlant(block.getType())) {
+			
+			int chance = GrowbieConfiguration.getGrowablePlantsSuccessChance();
+			if ((new Random()).nextInt(100) > chance) {
+				return false;
+			}
+			
 			int plantsToGrow = GrowbieConfiguration.plantGrowthRate(block.getType());
 
 			//Populate list of suitable blocks adjacent to us
@@ -54,6 +60,12 @@ public abstract class Gardener {
 	public static boolean growBlocks(Block block) {
 		boolean didGrow = false;
 		if (GrowbieConfiguration.isGrowableBlock(block.getType())) {
+			
+			int chance = GrowbieConfiguration.getGrowableBlocksSuccessChance();
+			if ((new Random()).nextInt(100) > chance) {
+				return false;
+			}
+			
 			//Leaves is a special case (really just a special case of me abusing the config file, but whatever)
 			if (block.getType().equals(Material.LOG) && GrowbieConfiguration.blockForGrowableBlock(block.getType()).equals(Material.LEAVES)) {
 				int range = 1;
@@ -82,22 +94,23 @@ public abstract class Gardener {
 	public static boolean spreadBlocks(Block block) {
 		boolean didGrow = false;
 		if (GrowbieConfiguration.isSpreadableBlock(block.getType())) {
+			
+			int chance = GrowbieConfiguration.getSpreadableBlocksSuccessChance();
+			if ((new Random()).nextInt(100) > chance) {
+				return false;
+			}
 
 			// Let's loop over three surrounding dimensions
 			int range = 1;
 			for (int dx = -(range); dx <= range; dx++){
 				for (int dy = -(range); dy <= range; dy++){
 					for (int dz = -(range); dz <= range; dz++){
-						
 						Block loop = block.getRelative(dx, dy, dz);
-						
 						if (loop.getType() == GrowbieConfiguration.blockForSpreadableBlock(block.getType())) {
-							
 							// Special check for grass - only grow if air on block above
 							if(block.getType() == Material.GRASS && loop.getRelative(BlockFace.UP).getType() != Material.AIR) {
 								continue;
 							}
-							
 							loop.setType(block.getType());
 							didGrow = true;
 						}
@@ -106,50 +119,6 @@ public abstract class Gardener {
 			}
 		}
 		return didGrow;
-	}
-	
-	public static boolean growTree(Block block) {
-		if(GrowbieConfiguration.isSapling(block.getType())){
-
-			// Biome data stolen from here
-			// http://www.minecraftforum.net/viewtopic.php?f=1020&t=151067
-			// Seems slightly incorrect though... definitely get some Birch in rainforests
-			// May need to play with probabilities
-
-			TreeType treeKind = TreeType.TREE;
-			Double treeRoll = Math.random();
-
-			switch(block.getBiome()) {
-			case RAINFOREST:
-				if(treeRoll <= 0.33) { treeKind = TreeType.BIG_TREE; }
-				break;
-			case SWAMPLAND:
-			case FOREST:
-				if(treeRoll <= 0.20) { treeKind = TreeType.BIRCH; }
-				else if(treeRoll <=  0.47) { treeKind = TreeType.BIG_TREE; }
-				break;
-			case TUNDRA:
-			case TAIGA:
-				if(treeRoll <= 0.33) { treeKind = TreeType.REDWOOD; }
-				else { treeKind = TreeType.TALL_REDWOOD; }
-				break;
-			default:
-				if(treeRoll <= 0.10) { treeKind = TreeType.BIG_TREE; }
-				break;
-			}
-			
-			block.setType(Material.AIR);
-
-			if(!block.getWorld().generateTree(block.getLocation(), treeKind)) {
-				block.setType(Material.SAPLING);
-				// We do not need to use useItem() as this will pass
-				// through to the Minecraft engine and also fail,
-				// consuming the bonemeal itself
-				return false;
-			}
-			return true;
-		}
-		return false;
 	}
 	
 	public static void useItem(Player player) {

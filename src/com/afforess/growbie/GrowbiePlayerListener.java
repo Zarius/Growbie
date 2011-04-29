@@ -35,9 +35,6 @@ public class GrowbiePlayerListener extends PlayerListener {
 		if (!action) {
 			action = Gardener.spreadBlocks(block);
 		}
-		if (!action) {
-			action = Gardener.growTree(block);
-		}
 
 		if (action){
 			Gardener.useItem(player);

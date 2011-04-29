@@ -17,7 +17,10 @@ public abstract class GrowbieConfiguration {
 	private static HashMap<Material,Integer> growablePlants;
 	private static HashMap<Material,Material> growableBlocks;
 	private static HashMap<Material,Material> spreadableBlocks;
-	private static Boolean betterTrees = false;
+	private static int growablePlantsChance;
+	private static int growableBlocksChance;
+	private static int spreadableBlocksChance;
+
 	
 	
 	public static void checkConfigFile() {
@@ -80,7 +83,10 @@ public abstract class GrowbieConfiguration {
 			}
 			
 			// load better trees option
-			betterTrees = Growbie.instance.getConfiguration().getBoolean("better_trees", false);
+			growablePlantsChance = Growbie.instance.getConfiguration().getInt("growable_plants_success_chance", 100);
+			growableBlocksChance = Growbie.instance.getConfiguration().getInt("growable_blocks_success_chance", 100);
+			spreadableBlocksChance = Growbie.instance.getConfiguration().getInt("spreadable_blocks_success_chance", 100);
+
 			
 		} catch (Exception e) {
 			System.out.println("Growbie: error loading configuration");
@@ -107,10 +113,6 @@ public abstract class GrowbieConfiguration {
 	public static boolean isSpreadableBlock(Material m) {
 		return spreadableBlocks.containsKey(m);
 	}
-	
-	public static boolean isSapling(Material m) {
-		return (betterTrees && (m == Material.SAPLING));
-	}
 
 	public static Material blockForGrowableBlock(Material m) {
 		return growableBlocks.get(m);
@@ -118,5 +120,17 @@ public abstract class GrowbieConfiguration {
 	
 	public static Material blockForSpreadableBlock(Material m) {
 		return spreadableBlocks.get(m);
+	}
+	
+	public static int getGrowablePlantsSuccessChance() {
+		return growablePlantsChance;
+	}
+	
+	public static int getGrowableBlocksSuccessChance() {
+		return growableBlocksChance;
+	}
+	
+	public static int getSpreadableBlocksSuccessChance() {
+		return spreadableBlocksChance;
 	}
 }
