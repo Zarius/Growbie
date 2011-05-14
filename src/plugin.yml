@@ -1,5 +1,5 @@
 name: Growbie
 main: com.afforess.growbie.Growbie
-version: 2.4
+version: 2.41
 authors: [Afforess, Cyklo, UnixSystem]
 description: A simple plugin that allows bonemeal to grow grass on dirt, spread pumpkins, and spread flowers
