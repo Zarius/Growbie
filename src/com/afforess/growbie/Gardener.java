@@ -18,13 +18,13 @@ public abstract class Gardener {
 		return item.getType() == Material.INK_SACK && item.getDurability() == 15;
 	}
 	
-	public static boolean growPlants(Block block) {
-		boolean didGrow = false;
+	public static int growPlants(Block block) {
+		int didGrow = 0;
 		if (GrowbieConfiguration.isGrowablePlant(block.getType())) {
 			
 			int chance = GrowbieConfiguration.getGrowablePlantsSuccessChance();
 			if ((new Random()).nextInt(100) > chance) {
-				return false;
+				return 2;
 			}
 			
 			int plantsToGrow = GrowbieConfiguration.plantGrowthRate(block.getType());
@@ -49,7 +49,7 @@ public abstract class Gardener {
 				if (GrowbieConfiguration.canGrowPlantOnBlock(growBlock)) {
 					// grow plant
 					growBlock.setType(block.getType());
-					didGrow = true;
+					didGrow = 1;
 					plantsToGrow--;
 				}
 			}
@@ -57,13 +57,13 @@ public abstract class Gardener {
 		return didGrow;
 	}
 	
-	public static boolean growBlocks(Block block) {
-		boolean didGrow = false;
+	public static int growBlocks(Block block) {
+		int didGrow = 0;
 		if (GrowbieConfiguration.isGrowableBlock(block.getType())) {
 			
 			int chance = GrowbieConfiguration.getGrowableBlocksSuccessChance();
 			if ((new Random()).nextInt(100) > chance) {
-				return false;
+				return 2;
 			}
 			
 			//Leaves is a special case (really just a special case of me abusing the config file, but whatever)
@@ -75,7 +75,7 @@ public abstract class Gardener {
 							Block loop = block.getRelative(dx, dy, dz);
 							if (loop.getTypeId() == Material.AIR.getId()) {
 								loop.setType(GrowbieConfiguration.blockForGrowableBlock(block.getType()));
-								didGrow = true;
+								didGrow = 1;
 							}
 						}
 					}
@@ -85,19 +85,19 @@ public abstract class Gardener {
 			else if(block.getRelative(BlockFace.UP).getType() == Material.AIR || GrowbieConfiguration.blockForGrowableBlock(block.getType()) != Material.GRASS) {
 				// transform block
 				block.setType(GrowbieConfiguration.blockForGrowableBlock(block.getType()));
-				didGrow = true;
+				didGrow = 1;
 			}
 		}
 		return didGrow;
 	}
 	
-	public static boolean spreadBlocks(Block block) {
-		boolean didGrow = false;
+	public static int spreadBlocks(Block block) {
+		int didGrow = 0;
 		if (GrowbieConfiguration.isSpreadableBlock(block.getType())) {
 			
 			int chance = GrowbieConfiguration.getSpreadableBlocksSuccessChance();
 			if ((new Random()).nextInt(100) > chance) {
-				return false;
+				return 2;
 			}
 
 			// Let's loop over three surrounding dimensions
@@ -112,7 +112,7 @@ public abstract class Gardener {
 								continue;
 							}
 							loop.setType(block.getType());
-							didGrow = true;
+							didGrow = 1;
 						}
 					}
 				}

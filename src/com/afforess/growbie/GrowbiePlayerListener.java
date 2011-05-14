@@ -28,15 +28,25 @@ public class GrowbiePlayerListener extends PlayerListener {
 			return;
 		}
 		
-		boolean action = Gardener.growPlants(block);
-		if (!action) {
+		//System.out.println("Growbie action detected, attempting growth.");
+		
+		int action = Gardener.growPlants(block);
+		if (action == 0) {
 			action = Gardener.growBlocks(block);
 		}
-		if (!action) {
+		if (action == 0) {
 			action = Gardener.spreadBlocks(block);
 		}
 
-		if (action){
+		if (action == 2 ) {
+			if (GrowbieConfiguration.getConsumeOnFail()) {
+				action = 1;
+			}
+		}
+		
+		//System.out.println("Growbie Action is: "+ action);
+		
+		if (action == 1){
 			Gardener.useItem(player);
 			event.setCancelled(true);
 			event.setUseInteractedBlock(Result.DENY);

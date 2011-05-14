@@ -10,7 +10,7 @@ growable_plants:
   LEAVES: 2
   
 #chance of success, out of 100. 0 is always failure, 100 is always success.
-growable_plants_success_chance:100
+growable_plants_success_chance: 100
 
 # growable blocks
 # block type, and what it should convert into when fed bone meal
@@ -20,7 +20,7 @@ growable_blocks:
   LOG: LEAVES
   
 #chance of success, out of 100. 0 is always failure, 100 is always success.
-growable_blocks_success_chance:100
+growable_blocks_success_chance: 100
   
 # spreadable blocks
 # seed block, followed by what it can propagate to and clone itself
@@ -29,4 +29,6 @@ spreadable_blocks:
   MOSSY_COBBLESTONE: COBBLESTONE
   
 #chance of success, out of 100. 0 is always failure, 100 is always success.
-spreadable_blocks_success_chance:100
+spreadable_blocks_success_chance: 100
+
+consume_on_fail: true

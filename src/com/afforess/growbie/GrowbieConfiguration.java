@@ -20,7 +20,7 @@ public abstract class GrowbieConfiguration {
 	private static int growablePlantsChance;
 	private static int growableBlocksChance;
 	private static int spreadableBlocksChance;
-
+	private static boolean consumeOnFail;
 	
 	
 	public static void checkConfigFile() {
@@ -86,6 +86,8 @@ public abstract class GrowbieConfiguration {
 			growablePlantsChance = Growbie.instance.getConfiguration().getInt("growable_plants_success_chance", 100);
 			growableBlocksChance = Growbie.instance.getConfiguration().getInt("growable_blocks_success_chance", 100);
 			spreadableBlocksChance = Growbie.instance.getConfiguration().getInt("spreadable_blocks_success_chance", 100);
+			consumeOnFail = Growbie.instance.getConfiguration().getBoolean("consume_on_fail", false);
+
 
 			
 		} catch (Exception e) {
@@ -132,5 +134,9 @@ public abstract class GrowbieConfiguration {
 	
 	public static int getSpreadableBlocksSuccessChance() {
 		return spreadableBlocksChance;
+	}
+
+	public static boolean getConsumeOnFail() {
+		return consumeOnFail;
 	}
 }
